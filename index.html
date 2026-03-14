@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chill Pill Birthday - Final Polish (Doodle Edition)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Short+Stack&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --label-white: #ffffff;
+            /* Update borders to a soft pencil-gray for a sketchy feel */
+            --bottle-border: #555; 
+            --accent-pink: #f2bac5;
+            --text-gray: #444;
+            --rx-color: #333;
+            /* 2. Set Doodle Font as the primary font */
+            --font-main: 'Short Stack', cursive, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f3f1;
+            margin: 0;
+            font-family: var(--font-main);
+            perspective: 2000px;
+        }
+
+        /* Float the hint text above */
+        .instruction {
+            position: absolute;
+            top: -60px;
+            font-size: 18px;
+            color: #888;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.5s ease;
+            white-space: nowrap;
+        }
+
+        .stage {
+            position: relative;
+            width: 450px;
+            height: 650px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- THE SKETCHY BORDERS --- */
+        /* Applying sketchy-style borders by layering and slight skew */
+        .sketchy-border {
+            /* 3a. Thicker but less perfect outline */
+            border: 4px solid var(--bottle-border);
+            /* 3b. Add imperfect radius */
+            border-radius: 6px 6px 3px 3px; 
+            box-shadow: 
+                -2px 2px 0px 0px rgba(0,0,0,0.1), /* Layer 1 */
+                2px -2px 0px 0px rgba(85,85,85,0.4), /* Layer 2 */
+                0px 0px 0px 1px var(--bottle-border); /* Perfecting the layer alignment */
+            /* 3c. Slightly imperfect shape via skew */
+            transform: skew(-1deg, 1deg); 
+        }
+
+        /* --- THE LID --- */
+        .lid {
+            width: 220px;
+            height: 65px;
+            background: var(--accent-pink);
+            /* SKETCHY STYLE BORDERS */
+            border: 4px solid var(--bottle-border);
+            border-radius: 10px 10px 4px 4px;
+            transform: skew(-1deg, 1deg);
+            box-shadow: 
+                -3px 3px 0px 0px rgba(0,0,0,0.1),
+                3px -3px 0px 0px rgba(85,85,85,0.3);
+
+            z-index: 100;
+            cursor: pointer;
+            transition: transform 1.2s ease, opacity 0.6s, box-shadow 0.6s;
+            /* Keep vertical lines, but make them sketchy */
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 18px, var(--bottle-border) 18px, var(--bottle-border) 20px);
+        }
+
+        /* --- THE BOTTLE --- */
+        .bottle {
+            width: 200px;
+            height: 320px;
+            /* SKETCHY STYLE BORDERS */
+            border: 4px solid var(--bottle-border);
+            border-top: none;
+            border-radius: 0 0 30px 30px;
+            background: #fff;
+            transform: skew(1deg, -1deg); /* SKEW BOTTLE */
+            box-shadow: 
+                -3px 3px 0px 0px rgba(0,0,0,0.1),
+                3px -3px 0px 0px rgba(85,85,85,0.3);
+
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* SHAKE ANIMATION - Vibrating back and forth */
+        @keyframes shake {
+            0% { transform: translateX(0) skew(-1deg, 1deg); }
+            25% { transform: translateX(-5px) skew(-1deg, 1deg); }
+            50% { transform: translateX(5px) skew(-1deg, 1deg); }
+            75% { transform: translateX(-5px) skew(-1deg, 1deg); }
+            100% { transform: translateX(0) skew(-1deg, 1deg); }
+        }
+
+        .shaking {
+            animation: shake 0.1s ease-in-out infinite;
+        }
+
+        /* --- THE LABEL --- */
+        .label-content {
+            width: 85%;
+            height: 80%;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            z-index: 50;
+            transition: opacity 0.8s;
+            pointer-events: none;
+            /* 4. SKEW LABEL TO ALIGN WITH BOTTLE */
+            transform: skew(-1deg, 1deg); 
+        }
+
+        .pill-box-name {
+            font-size: 32px; /* Bigger brand text */
+            font-weight: 900;
+            color: #d896a2; /* Red-pink brand color */
+            margin: 10px 0 5px 0;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .dosage {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #666;
+            font-weight: bold;
+            border-top: 2px solid #eee;
+            padding-top: 10px;
+        }
+
+        .bottom-row {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+        }
+
+        .mg-text { font-size: 16px; font-weight: bold; color: #888; }
+        .rx-symbol { font-size: 45px; font-family: 'Verdana', serif; font-weight: bold; color: var(--rx-color); line-height: 0.8; }
+
+        /* --- DUMMY BACKGROUND PILLS --- */
+        .dummy-pill {
+            position: absolute;
+            width: 40px;
+            height: 18px;
+            border-radius: 20px;
+            opacity: 0.3;
+            z-index: 10;
+        }
+
+        /* --- OPEN STATE --- */
+        .stage.open .instruction { opacity: 0; }
+        .stage.open .lid { transform: translateY(-350px) rotate(25deg); opacity: 0; box-shadow: none; }
+        .stage.open .bottle {
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            border-top: 4px solid var(--bottle-border);
+            background: #fdfdfd;
+            overflow: visible;
+            transform: skew(0,0); /* Un-skew in open view */
+            box-shadow: -3px 3px 0px 0px rgba(0,0,0,0.1), 3px -3px 0px 0px rgba(85,85,85,0.3);
+        }
+        .stage.open .label-content, .stage.open .dummy-pill { opacity: 0; }
+
+        /* --- INTERACTIVE PILLS --- */
+        .pill {
+            position: absolute;
+            width: 80px;
+            height: 35px;
+            border-radius: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            cursor: pointer;
+            z-index: 80;
+            display: none;
+            transition: transform 0.6s, opacity 0.4s;
+            overflow: hidden;
+            /* SKETCHY PILL BORDERS */
+            border: 1px solid rgba(0,0,0,0.05);
+            /* Slightly imperfect shape via skew */
+            transform: skew(2deg);
+        }
+        .stage.open .pill { display: block; }
+        .c-left { background: #fff; width: 50%; height: 100%; position: absolute; left: 0; }
+        .c-right { background: var(--accent-pink); width: 50%; height: 100%; position: absolute; right: 0; }
+        
+        .pill.removed { transform: translate(600px, -400px) rotate(45deg); opacity: 0; }
+
+        /* --- BIRTHDAY BANNER --- */
+        .pink-pill-system {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 70;
+            cursor: pointer;
+        }
+        .stage.open .pink-pill-system { display: block; }
+
+        .banner {
+            width: 80px; height: 40px; background: #fff; border-radius: 40px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1.6rem; color: #333; font-weight: bold;
+            /* UNIFFIED CAPSULE BORDERS FOR DOODLE LOOK */
+            border: 1px solid rgba(0,0,0,0.05);
+            /* Slight imperfect shape via skew */
+            transform: skew(-2deg);
+        }
+
+        .pill-end { position: absolute; width: 40px; height: 40px; background: var(--accent-pink); top: 0; z-index: 75; transition: transform 0.8s; }
+        .end-left { left: 0; border-radius: 40px 0 0 40px; }
+        .end-right { right: 0; border-radius: 0 40px 40px 0; }
+
+        .pink-pill-system.cracked { z-index: 200; }
+        .pink-pill-system.cracked .banner { width: 420px; transform: scale(1.1); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .pink-pill-system.cracked .end-left { transform: translateX(-15px); }
+        .pink-pill-system.cracked .end-right { transform: translateX(15px); }
+    </style>
+</head>
+<body>
+
+    <div class="stage" id="stage">
+        <div class="lid" onclick="startOpening()"></div>
+
+        <div class="bottle" id="bottle">
+            <div class="label-content">
+                <div class="pill-box-name">CHILL PILLS</div>
+                <div class="dosage">TAKE ONE CAPSULE AS NEEDED<br>FOR MAXIMUM RELAXATION</div>
+                <div class="bottom-row">
+                    <div class="mg-text">10mg</div>
+                    <div class="rx-symbol">Rx</div>
+                </div>
+            </div>
+
+            <div class="dummy-pill" style="top:70%; left:20%; background: #fff; transform:rotate(20deg);"></div>
+            <div class="dummy-pill" style="top:75%; left:50%; background: var(--accent-pink); transform:rotate(-10deg);"></div>
+            <div class="dummy-pill" style="top:80%; left:30%; background: #fff; transform:rotate(45deg);"></div>
+
+            <script>
+                for (let i = 0; i < 10; i++) {
+                    const top = 25 + Math.random() * 50;
+                    const left = 20 + Math.random() * 55;
+                    const rot = -40 + Math.random() * 80;
+                    document.write(`
+                        <div class="pill" style="top:${top}%; left:${left}%; transform:rotate(${rot}deg)" onclick="removePill(this)">
+                            <div class="c-left"></div><div class="c-right"></div>
+                        </div>
+                    `);
+                }
+            </script>
+
+            <div class="pink-pill-system" id="pinkSystem" onclick="crackPinkPill()">
+                <div class="banner">
+                    <div class="pill-end end-left"></div>
+                    <span>Happy Birthday Aalu!</span>
+                    <div class="pill-end end-right"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startOpening() {
+            const stage = document.getElementById('stage');
+            const bottle = document.getElementById('bottle');
+            
+            // 1. Start the shaking
+            bottle.classList.add('shaking');
+            
+            // 2. Open the bottle after 400ms of shaking
+            setTimeout(() => {
+                bottle.classList.remove('shaking');
+                stage.classList.add('open');
+            }, 400);
+        }
+
+        function removePill(el) {
+            el.classList.add('removed');
+        }
+
+        function crackPinkPill() {
+            document.getElementById('pinkSystem').classList.add('cracked');
+        }
+    </script>
+</body>
+</html>
